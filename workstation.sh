@@ -68,3 +68,12 @@ VALIDATE $? "helm installation"
 #k9s
 curl -sS https://webinstall.dev/k9s | bash
 VALIDATE $? "k9s installation"
+
+#Extend the volume of the server
+
+growpart /dev/nvme0n1 4  # xvda for t2.micro for t3.micro it is nvme
+lvextend -l +50%FREE /dev/RootVG/rootVol
+lvextend -l +50%FREE /dev/RootVG/varVol
+xfs_growfs /
+xfs_growfs /var
+df -hT
